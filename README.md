@@ -21,6 +21,7 @@ Nowadays the most popular Servlet containers, such as Apache Tomcat, Eclipse Jet
 
 > For full-fledged features support of Jakarta EE 9, please go to [hantsy/jakartaee9-starter-boilerplate](https://github.com/hantsy/jakartaee9-starter-boilerplate).
 
+mvn clean verify -Parq-tomcat-remote
 
 ## Build 
 

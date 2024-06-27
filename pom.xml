@@ -55,7 +55,7 @@
         <!-- TODO: update Arquillian BOM -->
         <arquillian-bom.version>1.8.0.Final</arquillian-bom.version>
         <junit-jupiter.version>5.10.2</junit-jupiter.version>
-        <arquillian-tomcat.version>1.2.0.Final</arquillian-tomcat.version>
+        <arquillian-tomcat.version>1.2.1.Final</arquillian-tomcat.version>
         <arquillian-jetty.version>2.0.0.Final</arquillian-jetty.version>
 
         <!-- Test Utilities -->
@@ -417,111 +417,122 @@
             </dependencies>
         </profile>
         <profile>
-            <id>arq-jetty-embedded</id>
+            <id>arq-tomcat-managed</id>
             <properties>
                 <skipTests>false</skipTests>
             </properties>
             <dependencies>
                 <dependency>
                     <groupId>org.jboss.arquillian.container</groupId>
-                    <artifactId>arquillian-jetty-embedded-11</artifactId>
-                    <version>${arquillian-jetty.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-annotations</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-plus</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-deploy</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-servlet</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-webapp</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-cdi</artifactId>
-                    <scope>test</scope>
-                    <!-- to remove when 11.0.10 released -->
-                    <!-- see https://github.com/eclipse/jetty.project/pull/7991 -->
-                    <version>${jetty.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.eclipse.jetty.websocket</groupId>
-                    <artifactId>websocket-jakarta-server</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>apache-jsp</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-simple</artifactId>
-                    <version>2.0.13</version>
-                    <scope>test</scope>
-                </dependency>
-                <!-- see: https://github.com/arquillian/arquillian-container-jetty/pull/108 -->
-                <!--<dependency>
-                    <groupId>org.jboss.arquillian.testenricher</groupId>
-                    <artifactId>arquillian-testenricher-cdi-jakarta</artifactId>
-                </dependency>-->
-            </dependencies>
-        </profile>
-        <profile>
-            <id>arq-weld</id>
-            <properties>
-                <skipTests>false</skipTests>
-            </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.arquillian.container</groupId>
-                    <artifactId>arquillian-weld-embedded</artifactId>
-                    <version>${arquillian-weld-embedded.version}</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.weld</groupId>
-                    <artifactId>weld-core-impl</artifactId>
-                    <version>${weld.version}</version>
+                    <artifactId>arquillian-tomcat-managed-10</artifactId>
+                    <version>${arquillian-tomcat.version}</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>${maven-failsafe-plugin.version}</version>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven3-plugin</artifactId>
                         <configuration>
-                            <systemPropertyVariables>
-                                <arquillian.launch>arq-weld</arquillian.launch>
-                            </systemPropertyVariables>
-                            <excludes>
-                                <exclude>**/it/GreetingResourceTest*</exclude>
-                                <exclude>**/it/GreetingServletTest*</exclude>
-                            </excludes>
+                            <container>
+                                <containerId>tomcat10x</containerId>
+                                <artifactInstaller>
+                                    <groupId>org.apache.tomcat</groupId>
+                                    <artifactId>tomcat</artifactId>
+                                    <version>${tomcat.version}</version>
+                                </artifactInstaller>
+                            </container>
+                            <configuration>
+                                <properties>
+                                    <!-- <cargo.servlet.port>8080</cargo.servlet.port>-->
+                                    <cargo.logging>low</cargo.logging>
+                                </properties>
+                            </configuration>
                         </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>arq-tomcat-remote</id>
+            <properties>
+                <skipTests>false</skipTests>
+                <tomcat.major.version>10</tomcat.major.version>
+                <tomcat.version>${tomcat.major.version}.0.27</tomcat.version>
+                <test.manager.username>admin</test.manager.username>
+                <test.manager.password>password</test.manager.password>
+
+                <test.ajp.port>8009</test.ajp.port>
+                <test.http.port>8080</test.http.port>
+                <test.jmx.port>8050</test.jmx.port>
+                <test.rmi.port>8099</test.rmi.port>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.arquillian.container</groupId>
+                    <artifactId>arquillian-tomcat-remote-10</artifactId>
+                    <version>${arquillian-tomcat.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <configuration>
+                            <container>
+                                <containerId>tomcat${tomcat.major.version}x</containerId>
+                                <zipUrlInstaller>
+                                    <url>https://archive.apache.org/dist/tomcat/tomcat-${tomcat.major.version}/v${tomcat.version}/bin/apache-tomcat-${tomcat.version}.zip</url>
+                                </zipUrlInstaller>
+                            </container>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                                <configuration>
+                                    <container>
+                                        <systemProperties>
+                                            <java.rmi.server.hostname>127.0.0.1</java.rmi.server.hostname>
+                                            <com.sun.management.jmxremote.port>${test.jmx.port}</com.sun.management.jmxremote.port>
+                                            <com.sun.management.jmxremote.ssl>false</com.sun.management.jmxremote.ssl>
+                                            <com.sun.management.jmxremote.authenticate>false</com.sun.management.jmxremote.authenticate>
+                                        </systemProperties>
+                                    </container>
+                                    <configuration>
+                                        <properties>
+                                            <cargo.servlet.port>${test.http.port}</cargo.servlet.port>
+                                            <cargo.tomcat.ajp.port>${test.ajp.port}</cargo.tomcat.ajp.port>
+                                            <cargo.rmi.port>${test.rmi.port}</cargo.rmi.port>
+                                        </properties>
+                                        <configfiles>
+                                            <configfile>
+                                                <file>${project.build.testOutputDirectory}/tomcat-users.xml</file>
+                                                <toDir>conf</toDir>
+                                            </configfile>
+                                        </configfiles>
+                                    </configuration>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
         <profile>
             <id>coverage</id>
             <properties>
@@ -627,115 +638,7 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
-            <id>jetty-embed</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-maven-plugin</artifactId>
-                        <configuration>
-                            <deployMode>EMBED</deployMode>
-                            <useProvidedScope>true</useProvidedScope>
-                            <httpConnector>
-                                <port>9090</port>
-                            </httpConnector>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-            <dependencies>
-                <dependency>
-                    <groupId>org.glassfish.web</groupId>
-                    <artifactId>jakarta.servlet.jsp.jstl</artifactId>
-                    <version>${jakarta.servlet.jsp.jstl.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.glassfish</groupId>
-                    <artifactId>jakarta.json</artifactId>
-                    <version>${jakarta.json.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>jakarta.el</groupId>
-                    <artifactId>jakarta.el-api</artifactId>
-                    <version>4.0.0</version>
-                    <scope>provided</scope>
-                </dependency>
 
-                <dependency>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-servlet</artifactId>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-plus</artifactId>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-annotations</artifactId>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-webapp</artifactId>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.eclipse.jetty</groupId>
-                    <artifactId>jetty-cdi</artifactId>
-                    <version>${jetty.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-simple</artifactId>
-                    <version>2.0.13</version>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>jetty-external</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-maven-plugin</artifactId>
-                        <configuration>
-                            <deployMode>EXTERNAL</deployMode>
-                            <webApp>
-                                <contextPath>/${project.artifactId}</contextPath>
-                            </webApp>
-                            <jettyHome>${env.JETTY_HOME}</jettyHome>
-                            <modules>jdni,jsp,servlet,glassfish-jstl,websocket-jakarta,cdi-decorate</modules>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-            <dependencies>
-                <dependency>
-                    <groupId>org.glassfish.web</groupId>
-                    <artifactId>jakarta.servlet.jsp.jstl</artifactId>
-                    <version>${jakarta.servlet.jsp.jstl.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.glassfish</groupId>
-                    <artifactId>jakarta.json</artifactId>
-                    <version>${jakarta.json.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>jakarta.el</groupId>
-                    <artifactId>jakarta.el-api</artifactId>
-                    <version>4.0.0</version>
-                    <scope>provided</scope>
-                </dependency>
-            </dependencies>
-        </profile>
     </profiles>
     <reporting>
         <plugins>

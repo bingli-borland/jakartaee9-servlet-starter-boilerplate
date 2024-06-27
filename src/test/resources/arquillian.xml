@@ -27,6 +27,25 @@
             <property name="jbossHome">${jbossHome:target/wildfly-18.0.1.Final}</property>
         </configuration>
     </container>-->
+
+    <container qualifier="arq-tomcat-remote" default="true">
+        <configuration>
+            <property name="jmxPort">8050</property>
+            <property name="httpPort">8080</property>
+            <property name="user">admin</property>
+            <property name="pass">password</property>
+        </configuration>
+    </container>
+
+<!--    <container qualifier="arq-tomcat-managed" default="true">-->
+<!--        <configuration>-->
+<!--            <property name="catalinaHome">D:\project\jakartaee9-servlet-starter-boilerplate\target\cargo\installs\tomcat-10.0.27\apache-tomcat-10.0.27</property>-->
+<!--            <property name="catalinaBase">D:\project\jakartaee9-servlet-starter-boilerplate\target\cargo\configurations\tomcat10x</property>-->
+<!--            <property name="user">admin</property>-->
+<!--            <property name="pass">password</property>-->
+<!--            <property name="javaVmArguments">-Xmx1024m &#45;&#45;add-opens=java.base/java.io=ALL-UNNAMED &#45;&#45;add-opens=java.base/java.nio=ALL-UNNAMED &#45;&#45;add-opens=java.base/java.lang=ALL-UNNAMED &#45;&#45;add-opens=java.base/java.lang.reflect=ALL-UNNAMED &#45;&#45;add-opens=java.base/java.net=ALL-UNNAMED &#45;&#45;add-opens=java.base/java.util=ALL-UNNAMED &#45;&#45;add-opens=java.base/javax.crypto=ALL-UNNAMED &#45;&#45;add-opens=java.base/jdk.internal.ref=ALL-UNNAMED &#45;&#45;add-opens=java.base/jdk.internal.misc=ALL-UNNAMED &#45;&#45;add-opens=java.base/jdk.internal.module=ALL-UNNAMED &#45;&#45;add-opens=java.base/jdk.internal.loader=ALL-UNNAMED &#45;&#45;add-opens=java.base/sun.security.tools.keytool=ALL-UNNAMED &#45;&#45;add-opens=java.base/sun.security.util=ALL-UNNAMED &#45;&#45;add-opens=java.base/sun.nio.ch=ALL-UNNAMED &#45;&#45;add-opens=java.base/sun.net.www.protocol.jar=ALL-UNNAMED &#45;&#45;add-opens=java.base/sun.security.pkcs=ALL-UNNAMED &#45;&#45;add-opens=java.base/sun.security.x509=ALL-UNNAMED &#45;&#45;add-opens=java.base/sun.security.action=ALL-UNNAMED &#45;&#45;add-opens=java.base/sun.security.provider=ALL-UNNAMED &#45;&#45;add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED</property>-->
+<!--        </configuration>-->
+<!--    </container>-->
     <extension qualifier="jacoco">
            <property name="includes">com.example.*</property>
            <property name="excludes"></property>
